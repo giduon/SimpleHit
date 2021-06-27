@@ -14,6 +14,10 @@ public class MapManager : MonoBehaviour
     WallPrefab[] wallPrefabs;
 
     [SerializeField]
+    [Header("첫번째 벽 위치")]
+    Transform startWallPoint;
+
+    [SerializeField]
     [Header("생성 되기전 첫 벽 위치")]
     Transform[] fistWalls;
 
@@ -39,6 +43,8 @@ public class MapManager : MonoBehaviour
     [Header("벽 사라질 위치")]
     Transform endWallPoint;
 
+    public bool isMove = false;
+
     WaitForSeconds waitWallMove;
 
     void Start()
@@ -46,21 +52,36 @@ public class MapManager : MonoBehaviour
         waitWallMove = new WaitForSeconds(0.1f * Time.deltaTime);
     }
 
+    public void CreatStartWall()
+    {
+        isMove = true;
+        GameObject wall = CreateWall(startWall);
+        wall.transform.position = startWallPoint.transform.position;
+        OnMoveMap(wall);
+    }
+
     public void OnStartMap()
     {
         foreach (Transform fistWall in fistWalls)
         {
-            OnWallChainBind(fistWall);
+            OnSpecifyPositionWall(fistWall);
         }
 
-        OnMoveMap(startWall);
         StartCoroutine(OnCreatWallCoroutine());
     }
 
-    void OnWallChainBind(Transform fistWall = null)
+    GameObject CreateWall(GameObject bringWall = null)
     {
-        GameObject wall = Instantiate(wallPrefabs[Random.Range(0, wallPrefabs.Length)].wall);
+        if (!isMove) return null;
+        GameObject wall = Instantiate(bringWall == null ? wallPrefabs[Random.Range(0, wallPrefabs.Length)].wall: bringWall);
         wall.transform.SetParent(wallBox.transform, false);
+        return wall;
+    }
+
+    void OnSpecifyPositionWall(Transform fistWall = null)
+    {
+        if (!isMove) return;
+        GameObject wall = CreateWall();
         if (fistWall != null) wall.transform.position = fistWall.transform.position;
         else wall.transform.position = createPoint.transform.position;
         OnMoveMap(wall);
@@ -71,7 +92,7 @@ public class MapManager : MonoBehaviour
         {
             yield return new WaitForSeconds(wallCreatSpeed);
             //yield return waitWallCreate;
-            OnWallChainBind();
+            OnSpecifyPositionWall();
         }
     }
 
@@ -82,19 +103,30 @@ public class MapManager : MonoBehaviour
     IEnumerator WallMoveCoroutine(GameObject wall)
     {
        
-            while (true)
+        while (true)
+        {
+            yield return waitWallMove;
+            yield return new WaitUntil(()=> isMove);
+            if (wall == null) break;
+                 
+            if (wall.transform.position.z == endWallPoint.position.z)
             {
-                yield return waitWallMove;
-                if (wall == null) break;
-                if (wall.transform.position.z == endWallPoint.position.z)
-                {
-                    Destroy(wall);
-                }
-                else
-                {
-
-                    wall.transform.position = Vector3.MoveTowards(wall.transform.position, endWallPoint.transform.position, wallMoveSpeed * Time.deltaTime);
-                }
+                Destroy(wall);
             }
+            else
+            {
+                wall.transform.position = Vector3.MoveTowards(wall.transform.position, endWallPoint.transform.position, wallMoveSpeed * Time.deltaTime);
+            }
+        }
+    }
+   
+    public void ClearWall()
+    {
+        isMove = false;
+        for (int i =0; i < wallBox.transform.childCount; i++)
+        {
+            GameObject wall = wallBox.transform.GetChild(i).gameObject;
+            if(wall != null) Destroy(wall);
+        }
     }
 }

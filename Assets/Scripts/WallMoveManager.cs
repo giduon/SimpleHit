@@ -19,8 +19,8 @@ public class WallMoveManager : MonoBehaviour
     [SerializeField]
     MoveWallObj[] moveWallObjs;
 
-    Vector3 md = new Vector3(0, -1f, 0);
-    Vector3 mu = new Vector3(0, 1f, 0);
+    //Vector3 md = new Vector3(0, -1f, 0);
+    //Vector3 mu = new Vector3(0, 1f, 0);
 
     WaitForSeconds waitMoveSpeed1s;
     WaitForSeconds waitMoveSpeed10s;

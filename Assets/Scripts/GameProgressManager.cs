@@ -16,7 +16,14 @@ public class GameProgressManager : MonoBehaviour
     [Header("게임 시작 위치")]
     Transform StartPoint;
 
+    [SerializeField]
+    [Header("게임 끝나고 돌아갈 위치")]
+    Transform EndPoint;
+
     public bool isStart = false;
+
+    [ContextMenuItem("로비로 가기", "EndGame")]
+    public string clear = "<- 오른쪽 버튼으로 실행";
 
     WaitForSeconds waitCameraSpeed;
 
@@ -29,24 +36,62 @@ public class GameProgressManager : MonoBehaviour
     {
         isStart = true;
         StartBtn.SetActive(false);
-        StartCoroutine(CameraRotationCoroutine(() => {
+        StartCoroutine(StartCameraRotationCoroutine(() => {
             FindObjectOfType<MapManager>().OnStartMap();
         }));
         
     }
-    IEnumerator CameraRotationCoroutine(Action callback = null)
+    IEnumerator StartCameraRotationCoroutine(Action callback = null)
     {
         Transform mainCameraTransform = Camera.main.transform;
         float addY = Mathf.Abs(mainCameraTransform.rotation.y / 10f);
 
         bool isMoving = true;
+        bool isCreatWall = true;
         while (isMoving)
         {
             if (mainCameraTransform.rotation.y >= -0.01f) isMoving = false;
             mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 10f * Time.deltaTime);
             yield return waitCameraSpeed;
+
+            Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
+            if(isCreatWall && mainCameraTransform.rotation.y > -0.5f)
+            {
+                isCreatWall = false;
+                FindObjectOfType<MapManager>().CreatStartWall();
+            } 
         }
+        //CreatStartWall
         mainCameraTransform.rotation = Quaternion.Euler(0f, 0f, 0f);
         callback?.Invoke();
     }
+
+    public void EndGame()
+    {
+        Transform mainCameraTransform = Camera.main.transform;
+        mainCameraTransform.rotation = Quaternion.Euler(0f, -100f, 0f);
+        FindObjectOfType<MapManager>().ClearWall();
+
+        //StartCoroutine(EndCameraRotationCoroutine(() => {
+        //    FindObjectOfType<MapManager>().ClearWall();
+        //}));
+    }
+    /*
+    IEnumerator EndCameraRotationCoroutine(Action callback = null)
+    {
+        Transform mainCameraTransform = Camera.main.transform;
+        float addY = Mathf.Abs(mainCameraTransform.rotation.y / 10f);
+        yield return waitCameraSpeed;
+        //bool isMoving = true;
+        //while (isMoving)
+        //{
+        //    if (mainCameraTransform.rotation.y <= -100f) isMoving = false;
+        //    mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, EndPoint.transform.rotation, 10f * Time.deltaTime);
+        //    yield return waitCameraSpeed;
+        //}
+        mainCameraTransform.rotation = Quaternion.Euler(0f, -100f, 0f);
+        callback?.Invoke();
+    }
+    */
+
 }
