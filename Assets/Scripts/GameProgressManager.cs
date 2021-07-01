@@ -9,21 +9,21 @@ public class GameProgressManager : MonoBehaviour
     private void Awake() { instance = this; }
 
     [SerializeField]
-    [Header("ê²Œì„ ì‹œì‘ ë²„íŠ¼")]
+    [Header("°ÔÀÓ ½ÃÀÛ ¹öÆ°")]
     GameObject StartBtn;
 
     [SerializeField]
-    [Header("ê²Œì„ ì‹œì‘ ìœ„ì¹˜")]
+    [Header("°ÔÀÓ ½ÃÀÛ À§Ä¡")]
     Transform StartPoint;
 
     [SerializeField]
-    [Header("ê²Œì„ ëë‚˜ê³  ëŒì•„ê°ˆ ìœ„ì¹˜")]
+    [Header("°ÔÀÓ ³¡³ª°í µ¹¾Æ°¥ À§Ä¡")]
     Transform EndPoint;
 
     public bool isStart = false;
 
-    [ContextMenuItem("ë¡œë¹„ë¡œ ê°€ê¸°", "EndGame")]
-    public string clear = "<- ì˜¤ë¥¸ìª½ ë²„íŠ¼ìœ¼ë¡œ ì‹¤í–‰";
+    [ContextMenuItem("·Îºñ·Î °¡±â", "EndGame")]
+    public string clear = "<- ¿À¸¥ÂÊ ¹öÆ°À¸·Î ½ÇÇà";
 
     WaitForSeconds waitCameraSpeed;
 
@@ -39,7 +39,7 @@ public class GameProgressManager : MonoBehaviour
         StartCoroutine(StartCameraRotationCoroutine(() => {
             FindObjectOfType<MapManager>().OnStartMap();
         }));
-        
+
     }
     IEnumerator StartCameraRotationCoroutine(Action callback = null)
     {
@@ -51,15 +51,15 @@ public class GameProgressManager : MonoBehaviour
         while (isMoving)
         {
             if (mainCameraTransform.rotation.y >= -0.01f) isMoving = false;
-            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 10f * Time.deltaTime);
+            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 50f * Time.deltaTime);
             yield return waitCameraSpeed;
 
             Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
-            if(isCreatWall && mainCameraTransform.rotation.y > -0.5f)
+            if (isCreatWall && mainCameraTransform.rotation.y > -0.5f)
             {
                 isCreatWall = false;
                 FindObjectOfType<MapManager>().CreatStartWall();
-            } 
+            }
         }
         //CreatStartWall
         mainCameraTransform.rotation = Quaternion.Euler(0f, 0f, 0f);

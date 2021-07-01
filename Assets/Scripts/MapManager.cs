@@ -52,6 +52,9 @@ public class MapManager : MonoBehaviour
         waitWallMove = new WaitForSeconds(0.1f * Time.deltaTime);
     }
 
+    /// <summary>
+    /// 스타트 벽 생성
+    /// </summary>
     public void CreatStartWall()
     {
         isMove = true;
@@ -60,6 +63,9 @@ public class MapManager : MonoBehaviour
         OnMoveMap(wall);
     }
 
+    /// <summary>
+    /// 맵 움직이기 시작 하기
+    /// </summary>
     public void OnStartMap()
     {
         foreach (Transform fistWall in fistWalls)
@@ -70,6 +76,11 @@ public class MapManager : MonoBehaviour
         StartCoroutine(OnCreatWallCoroutine());
     }
 
+    /// <summary>
+    /// 벽 만들기 
+    /// </summary>
+    /// <param name="bringWall">지정한 벽이 있을때</param>
+    /// <returns>벽 오브젝트</returns>
     GameObject CreateWall(GameObject bringWall = null)
     {
         if (!isMove) return null;
@@ -78,6 +89,10 @@ public class MapManager : MonoBehaviour
         return wall;
     }
 
+    /// <summary>
+    /// 지정위치 랜덤으로 벽 생성
+    /// </summary>
+    /// <param name="fistWall"></param>
     void OnSpecifyPositionWall(Transform fistWall = null)
     {
         if (!isMove) return;
@@ -96,6 +111,10 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 벽 움직이기
+    /// </summary>
+    /// <param name="wall">벽 오브젝트</param>
     void OnMoveMap(GameObject wall)
     {
         if(wall != null) StartCoroutine(WallMoveCoroutine(wall));
@@ -120,6 +139,9 @@ public class MapManager : MonoBehaviour
         }
     }
    
+    /// <summary>
+    /// 벽 모두 지우기
+    /// </summary>
     public void ClearWall()
     {
         isMove = false;
