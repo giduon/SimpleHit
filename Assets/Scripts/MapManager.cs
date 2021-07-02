@@ -121,7 +121,6 @@ public class MapManager : MonoBehaviour
     }
     IEnumerator WallMoveCoroutine(GameObject wall)
     {
-       
         while (true)
         {
             yield return waitWallMove;

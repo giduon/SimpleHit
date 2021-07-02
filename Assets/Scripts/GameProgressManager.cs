@@ -54,7 +54,7 @@ public class GameProgressManager : MonoBehaviour
             mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 50f * Time.deltaTime);
             yield return waitCameraSpeed;
 
-            Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
+            // Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
             if (isCreatWall && mainCameraTransform.rotation.y > -0.5f)
             {
                 isCreatWall = false;
