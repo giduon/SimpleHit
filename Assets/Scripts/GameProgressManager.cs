@@ -9,21 +9,21 @@ public class GameProgressManager : MonoBehaviour
     private void Awake() { instance = this; }
 
     [SerializeField]
-    [Header("게임 시작 버튼")]
+    [Header("?? ?? ??")]
     GameObject StartBtn;
 
     [SerializeField]
-    [Header("게임 시작 위치")]
+    [Header("?? ?? ??")]
     Transform StartPoint;
 
     [SerializeField]
-    [Header("게임 끝나고 돌아갈 위치")]
+    [Header("?? ??? ??? ??")]
     Transform EndPoint;
 
     public bool isStart = false;
 
-    [ContextMenuItem("로비로 가기", "EndGame")]
-    public string clear = "<- 오른쪽 버튼으로 실행";
+    [ContextMenuItem("??? ??", "EndGame")]
+    public string clear = "<- ??? ???? ??";
 
     WaitForSeconds waitCameraSpeed;
 

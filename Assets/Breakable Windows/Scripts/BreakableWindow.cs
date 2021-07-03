@@ -60,6 +60,12 @@ public class BreakableWindow : MonoBehaviour {
             Debug.LogWarning("Warning: Window must not be rotated around x and z!");
     }
 
+    //private void OnEnable()
+    //{
+    //        BakeVertices();
+    //        BakeSplinters();
+    //        allreadyCalculated = true;
+    //}
     private void BakeVertices(bool trianglesToo = false)
     {
         vertices = new Vector3[(partsX + 1) * (partsY + 1)];
@@ -204,10 +210,28 @@ public class BreakableWindow : MonoBehaviour {
                 splinterParent.SetActive(true);
                 if (addTorques)
                 {
+                    
+                    //splinters[0].GetComponent<Rigidbody>().AddTorque(new Vector3(
+                    //      Random.Range(0f,1f) > 0.5f ? Random.Range(0f, 1f) * 50 : -Random.Range(0f, 1f) * 50
+                    //    , Random.Range(0f, 1f) > 0.5f ? Random.Range(0f, 1f) * 50 : -Random.Range(0f, 1f) * 50
+                    //    , Random.Range(0f, 1f) > 0.5f ? Random.Range(0f, 1f) * 50 : -Random.Range(0f, 1f) * 50));
+                    int count = 0;
                     for (int i = 0; i < splinters.Count; i++)
                     {
-                        splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
+                        if(splinters[i].GetComponent<Rigidbody>() != null) {
+                            splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(
+                                Random.value > 0.5f ? Random.value * 50 : -Random.value * 50,
+                                Random.value > 0.5f ? Random.value * 50 : -Random.value * 50,
+                                Random.value > 0.5f ? Random.value * 50 : -Random.value * 50
+                                ));
+                        }
+                        else
+                        {
+                            count++;
+                        }
                     }
+                    Debug.Log($"total : {splinters.Count}");
+                    Debug.Log($"count : {count}");
                 }
             }
             else

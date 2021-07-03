@@ -6,9 +6,9 @@ public class WallMoveManager : MonoBehaviour
 {
     enum MoveType
     {
-        ¾øÀ½,
-        À§¾Æ·¡,
-        ÁÂ¿ì,
+        NONE,
+        UPDOWN,
+        LEFTRIGHT,
     }
     [System.Serializable]
     class MoveWallObj
@@ -34,7 +34,7 @@ public class WallMoveManager : MonoBehaviour
         {
             switch (obj.type)
             {
-                case MoveType.À§¾Æ·¡:
+                case MoveType.UPDOWN:
                     StartCoroutine(MoveWallCoroutine(obj.wall));
                     break;
             }
@@ -42,7 +42,7 @@ public class WallMoveManager : MonoBehaviour
     }
     IEnumerator MoveWallCoroutine(GameObject obj)
     {
-        //¿òÁ÷ÀÓ ÆíÂ÷ (´Ù µ¿ÀÏÇÏ°Ô ¿òÁ÷ÀÌ´Â°Å ¹æÁö)
+        //ì›€ì§ì„ í¸ì°¨ (ë‹¤ ë™ì¼í•˜ê²Œ ì›€ì§ì´ëŠ”ê±° ë°©ì§€)
         switch (Random.Range(1, 4))
         {
             case 1:
@@ -64,14 +64,14 @@ public class WallMoveManager : MonoBehaviour
             yield return waitMoveSpeed1s;
             if (isUp)
             {
-                //¿Ã¶ó°¨
+                //ì˜¬ë¼ê°
                 obj.transform.position += 5f * Time.deltaTime * Vector3.up;
-                //ÇöÀç y <= y+8
+                //í˜„ì¬ y <= y+8
                 if (obj.transform.position.y > max) isUp = false;
             }
             else
             {
-                //³»·Á°¨
+                //ë‚´ë ¤ê°
                 obj.transform.position += 5f * Time.deltaTime * Vector3.down;
                 if (obj.transform.position.y < min) isUp = true;
             }
