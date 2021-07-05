@@ -2,44 +2,63 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameProgressManager : MonoBehaviour
 {
     public static GameProgressManager instance = null;
     private void Awake() { instance = this; }
 
+    public int magazineCnt = 99;
+
     [SerializeField]
-    [Header("?? ?? ??")]
+    [Header("탄창 박스")]
+    public GameObject magazineBox;
+
+    [SerializeField]
+    [Header("탄창 개수")]
+    public Text magazineCntText;
+
+    [SerializeField]
+    [Header("게임 시작 버튼")]
     GameObject StartBtn;
 
     [SerializeField]
-    [Header("?? ?? ??")]
+    [Header("게임 시작 위치")]
     Transform StartPoint;
 
     [SerializeField]
-    [Header("?? ??? ??? ??")]
+    [Header("게임 엔딩 위치")]
     Transform EndPoint;
 
     public bool isStart = false;
 
-    [ContextMenuItem("??? ??", "EndGame")]
-    public string clear = "<- ??? ???? ??";
+    [ContextMenuItem("게임 종료", "EndGame")]
+    public string clear = "<- 오른쪽 버튼 클릭";
 
     WaitForSeconds waitCameraSpeed;
 
+    Vector3 originCameraPos;
     void Start()
     {
         waitCameraSpeed = new WaitForSeconds(5f * Time.deltaTime);
+        magazineCntText.text = magazineCnt.ToString();
+        originCameraPos = Camera.main.transform.localPosition;
+    }
+
+    public void OnPause()
+    {
+        Debug.Log("OnPause");
     }
 
     public void OnTouchStart()
     {
         isStart = true;
+        magazineBox.SetActive(true);
         StartBtn.SetActive(false);
         StartCoroutine(StartCameraRotationCoroutine(() => {
             FindObjectOfType<MapManager>().OnStartMap();
         }));
-
     }
     IEnumerator StartCameraRotationCoroutine(Action callback = null)
     {
@@ -72,11 +91,11 @@ public class GameProgressManager : MonoBehaviour
         mainCameraTransform.rotation = Quaternion.Euler(0f, -100f, 0f);
         FindObjectOfType<MapManager>().ClearWall();
 
-        //StartCoroutine(EndCameraRotationCoroutine(() => {
-        //    FindObjectOfType<MapManager>().ClearWall();
-        //}));
+        StartCoroutine(EndCameraRotationCoroutine(() =>
+        {
+            FindObjectOfType<MapManager>().ClearWall();
+        }));
     }
-    /*
     IEnumerator EndCameraRotationCoroutine(Action callback = null)
     {
         Transform mainCameraTransform = Camera.main.transform;
@@ -92,6 +111,27 @@ public class GameProgressManager : MonoBehaviour
         mainCameraTransform.rotation = Quaternion.Euler(0f, -100f, 0f);
         callback?.Invoke();
     }
-    */
+
+    public void OnGameOver()
+    {
+        StartCoroutine(Shake(1f, 0.5f,() =>{ Invoke(nameof(EndGame), 1f); }));
+        
+    }
+    public IEnumerator Shake(float _amount, float _duration, Action callback = null)
+    {
+        float timer = 0;
+        while (timer <= _duration)
+        {
+            Camera.main.transform.localPosition = (Vector3)UnityEngine.Random.insideUnitCircle * _amount + originCameraPos;
+            timer += Time.deltaTime;
+            yield return new WaitForSeconds(0.1f);
+        }
+        Camera.main.transform.localPosition = originCameraPos;
+
+        callback?.Invoke();
+    }
+
+    
+   
 
 }

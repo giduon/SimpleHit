@@ -35,21 +35,27 @@ public class TouchMarblesManager : MonoBehaviour
     {
 		if (GameProgressManager.instance.isStart && isShot && Input.GetMouseButtonDown(0))
 		{
+            Debug.Log("Touch");
             isShot = false;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -(Camera.main.transform.position.z + zCnt))); //zCnt = 25
 			foreach (GameObject marbles in marblesList)
 			{
 				if (!marbles.activeSelf)
 				{
-                    //marbles.transform.position = new Vector3 (worldPos.x * 1920, worldPos.y * 1080, palyer.transform.position.z);
-                    //marbles.transform.position = new Vector3 (worldPos.x * Screen.width, worldPos.y * Screen.height, palyer.transform.position.z) * Time.deltaTime;
+                    // marbles.transform.position = new Vector3 (worldPos.x * 1920, worldPos.y * 1080, palyer.transform.position.z);
+                    // marbles.transform.position = new Vector3 (worldPos.x * Screen.width, worldPos.y * Screen.height, palyer.transform.position.z) * Time.deltaTime;
                     // marbles.transform.position = new Vector3 (worldPos.x, worldPos.y, palyer.transform.position.z) * Time.deltaTime;
                     marbles.transform.position = worldPos;
 					marbles.SetActive(true);
+                    GameProgressManager.instance.magazineCntText.text = (--GameProgressManager.instance.magazineCnt).ToString();
+                    if (GameProgressManager.instance.magazineCnt < 1)
+                    {
+                        GameProgressManager.instance.isStart = false;
+                        GameProgressManager.instance.OnGameOver();
+                    }
                     break;
 				}
 			}
-
 
             /*
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

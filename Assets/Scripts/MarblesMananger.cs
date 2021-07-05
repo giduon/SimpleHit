@@ -30,12 +30,10 @@ public class MarblesMananger : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    float addRotationSpeed = 0f;
     void FixedUpdate()
     {
         gameObject.TryGetComponent(out MeshRenderer mesh);
         mesh.material.mainTextureOffset -= Vector2.up * Time.deltaTime;
-
     }
 
 }
