@@ -87,8 +87,7 @@ public class GameProgressManager : MonoBehaviour
 
     public void EndGame()
     {
-        Transform mainCameraTransform = Camera.main.transform;
-        mainCameraTransform.rotation = Quaternion.Euler(0f, -100f, 0f);
+        Camera.main.transform.rotation = Quaternion.Euler(0f, -100f, 0f);
         FindObjectOfType<MapManager>().ClearWall();
 
         StartCoroutine(EndCameraRotationCoroutine(() =>
