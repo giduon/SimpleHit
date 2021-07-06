@@ -9,34 +9,38 @@ public class GameProgressManager : MonoBehaviour
     public static GameProgressManager instance = null;
     private void Awake() { instance = this; }
 
+    public bool isPause = false;
     public int magazineCnt = 99;
 
     [SerializeField]
-    [Header("?�창 박스")]
+    [Header("?�창 박스")]
     public GameObject magazineBox;
 
     [SerializeField]
-    [Header("?�창 개수")]
+    [Header("?�창 개수")]
     public Text magazineCntText;
 
     [SerializeField]
-    [Header("게임 ?�작 버튼")]
+    [Header("게임 ?�작 버튼")]
     GameObject StartBtn;
 
     [SerializeField]
-    [Header("게임 ?�작 ?�치")]
+    [Header("게임 ?�작 ?�치")]
     Transform StartPoint;
 
     [SerializeField]
-    [Header("게임 ?�딩 ?�치")]
+    [Header("게임 ?�딩 ?�치")]
     Transform EndPoint;
 
     public bool isStart = false;
 
     [ContextMenuItem("게임 종료", "EndGame")]
-    public string clear = "<- ?�른�?버튼 ?�릭";
+    public string clear = "<- ?�른�?버튼 ?�릭";
 
     WaitForSeconds waitCameraSpeed;
+
+    [SerializeField]
+    GameObject pauseBox;
 
     Vector3 originCameraPos;
     void Start()
@@ -48,7 +52,17 @@ public class GameProgressManager : MonoBehaviour
 
     public void OnPause()
     {
-        Debug.Log("OnPause");
+        Time.timeScale = 0;
+        pauseBox.transform.Find("On").gameObject.SetActive(false);
+        pauseBox.transform.Find("Off").gameObject.SetActive(true);
+        isPause = true;
+    }
+    public void OnPlay()
+    {
+        Time.timeScale = 1;
+        pauseBox.transform.Find("On").gameObject.SetActive(true);
+        pauseBox.transform.Find("Off").gameObject.SetActive(false);
+        isPause = false;
     }
 
     public void OnTouchStart()
@@ -64,13 +78,12 @@ public class GameProgressManager : MonoBehaviour
     {
         Transform mainCameraTransform = Camera.main.transform;
         float addY = Mathf.Abs(mainCameraTransform.rotation.y / 10f);
-
         bool isMoving = true;
         bool isCreatWall = true;
         while (isMoving)
         {
             if (mainCameraTransform.rotation.y >= -0.01f) isMoving = false;
-            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 10f * Time.deltaTime);
+            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 20f * Time.deltaTime);
             yield return waitCameraSpeed;
 
             // Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
@@ -113,9 +126,10 @@ public class GameProgressManager : MonoBehaviour
 
     public void OnGameOver()
     {
-        StartCoroutine(Shake(1f, 0.2f,() =>{ Invoke(nameof(EndGame), 1f); }));
+        StartCoroutine(Shake(0.2f, 0.2f,() =>{ Invoke(nameof(EndGame), 1f); }));
         
     }
+
     public IEnumerator Shake(float _amount, float _duration, Action callback = null)
     {
         float timer = 0;

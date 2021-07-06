@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TouchMarblesManager : MonoBehaviour
 {
@@ -33,9 +34,11 @@ public class TouchMarblesManager : MonoBehaviour
     Vector3 touchPos;
     void Update()
     {
-		if (GameProgressManager.instance.isStart && isShot && Input.GetMouseButtonDown(0))
+		if (GameProgressManager.instance.isStart
+            && !GameProgressManager.instance.isPause
+            && !EventSystem.current.currentSelectedGameObject // 터치한게 UI인지 확인
+            && isShot && Input.GetMouseButtonDown(0))
 		{
-            Debug.Log("Touch");
             isShot = false;
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -(Camera.main.transform.position.z + zCnt))); //zCnt = 25
 			foreach (GameObject marbles in marblesList)
