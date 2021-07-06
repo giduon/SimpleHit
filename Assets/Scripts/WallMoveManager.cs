@@ -42,7 +42,7 @@ public class WallMoveManager : MonoBehaviour
     }
     IEnumerator MoveWallCoroutine(GameObject obj)
     {
-        //움직임 편차 (다 동일하게 움직이는거 방지)
+        //?�직임 ?�차 (???�일?�게 ?�직이?�거 방�?)
         switch (Random.Range(1, 4))
         {
             case 1:
@@ -64,14 +64,14 @@ public class WallMoveManager : MonoBehaviour
             yield return waitMoveSpeed1s;
             if (isUp)
             {
-                //올라감
+                //?�라�?
                 obj.transform.position += 5f * Time.deltaTime * Vector3.up;
-                //현재 y <= y+8
+                //?�재 y <= y+8
                 if (obj.transform.position.y > max) isUp = false;
             }
             else
             {
-                //내려감
+                //?�려�?
                 obj.transform.position += 5f * Time.deltaTime * Vector3.down;
                 if (obj.transform.position.y < min) isUp = true;
             }

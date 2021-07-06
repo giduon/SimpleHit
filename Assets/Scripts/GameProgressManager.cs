@@ -12,29 +12,29 @@ public class GameProgressManager : MonoBehaviour
     public int magazineCnt = 99;
 
     [SerializeField]
-    [Header("탄창 박스")]
+    [Header("?�창 박스")]
     public GameObject magazineBox;
 
     [SerializeField]
-    [Header("탄창 개수")]
+    [Header("?�창 개수")]
     public Text magazineCntText;
 
     [SerializeField]
-    [Header("게임 시작 버튼")]
+    [Header("게임 ?�작 버튼")]
     GameObject StartBtn;
 
     [SerializeField]
-    [Header("게임 시작 위치")]
+    [Header("게임 ?�작 ?�치")]
     Transform StartPoint;
 
     [SerializeField]
-    [Header("게임 엔딩 위치")]
+    [Header("게임 ?�딩 ?�치")]
     Transform EndPoint;
 
     public bool isStart = false;
 
     [ContextMenuItem("게임 종료", "EndGame")]
-    public string clear = "<- 오른쪽 버튼 클릭";
+    public string clear = "<- ?�른�?버튼 ?�릭";
 
     WaitForSeconds waitCameraSpeed;
 
@@ -70,7 +70,7 @@ public class GameProgressManager : MonoBehaviour
         while (isMoving)
         {
             if (mainCameraTransform.rotation.y >= -0.01f) isMoving = false;
-            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 50f * Time.deltaTime);
+            mainCameraTransform.rotation = Quaternion.Lerp(mainCameraTransform.rotation, StartPoint.transform.rotation, 10f * Time.deltaTime);
             yield return waitCameraSpeed;
 
             // Debug.Log($" Camera : {mainCameraTransform.rotation.y}, Start : {StartPoint.transform.rotation.y }");
@@ -113,7 +113,7 @@ public class GameProgressManager : MonoBehaviour
 
     public void OnGameOver()
     {
-        StartCoroutine(Shake(1f, 0.5f,() =>{ Invoke(nameof(EndGame), 1f); }));
+        StartCoroutine(Shake(1f, 0.2f,() =>{ Invoke(nameof(EndGame), 1f); }));
         
     }
     public IEnumerator Shake(float _amount, float _duration, Action callback = null)
@@ -129,8 +129,4 @@ public class GameProgressManager : MonoBehaviour
 
         callback?.Invoke();
     }
-
-    
-   
-
 }

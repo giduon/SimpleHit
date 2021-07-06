@@ -9,7 +9,7 @@ public class MarblesMananger : MonoBehaviour
     public float strong = 0.3f;
     Rigidbody marblesRigd;
     Vector3 shot;
-
+    MeshRenderer mesh;
     void OnEnable()
     {
         //???
@@ -22,6 +22,10 @@ public class MarblesMananger : MonoBehaviour
         //shot.Normalize();
         //( ? ??? + ??? (y) ) * ? , ForceMode.Impulse (????? ?? ???)
         marblesRigd.AddForce((shot + new Vector3(0, 1f, 0)) * strong, ForceMode.Impulse);
+
+
+        gameObject.TryGetComponent(out mesh);
+        mesh.material.mainTextureOffset = Vector2.zero;
         Invoke(nameof(OnDisplayNoneActive), 5f);
     }
 
@@ -32,7 +36,6 @@ public class MarblesMananger : MonoBehaviour
 
     void FixedUpdate()
     {
-        gameObject.TryGetComponent(out MeshRenderer mesh);
         mesh.material.mainTextureOffset -= Vector2.up * Time.deltaTime;
     }
 

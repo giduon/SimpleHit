@@ -1537,7 +1537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50c753564cb9459d8744b7fc1142e43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  magazineCnt: 10
+  magazineCnt: 30
   magazineBox: {fileID: 2068568833}
   magazineCntText: {fileID: 57972348}
   StartBtn: {fileID: 1540790917}
